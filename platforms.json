@@ -1,7 +1,10 @@
-[
-  {"name": "Instagram", "url": "https://www.instagram.com/{username}"},
-  {"name": "Twitter", "url": "https://twitter.com/{username}"},
-  {"name": "GitHub", "url": "https://github.com/{username}"},
-  {"name": "TikTok", "url": "https://www.tiktok.com/@{username}"},
-  {"name": "Reddit", "url": "https://www.reddit.com/user/{username}"}
-]
+{
+  "GitHub": "https://github.com/{username}",
+  "Instagram": "https://www.instagram.com/{username}",
+  "Twitter": "https://twitter.com/{username}",
+  "TikTok": "https://www.tiktok.com/@{username}",
+  "Reddit": "https://www.reddit.com/user/{username}",
+  "Pinterest": "https://www.pinterest.com/{username}",
+  "Snapchat": "https://www.snapchat.com/add/{username}",
+  "Medium": "https://medium.com/@{username}"
+}
