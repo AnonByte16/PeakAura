@@ -10,44 +10,22 @@ def ask_platform():
     choice = input("Enter choice (1/2/3): ")
     return choice
 
-def search_instagram(name):
-    print(f"\n[+] Searching Instagram for: {name}")
-    query = name.replace(" ", "")
-    url = f"https://www.instagram.com/web/search/topsearch/?context=blended&query={query}"
-    headers = {"User-Agent": "Mozilla/5.0"}
+def search_duckduckgo(site, name):
+    print(f"\n[+] Searching {site} for: {name}")
+    query = f'site:{site} "{name}"'
+    url = f"https://duckduckgo.com/html/?q={query.replace(' ', '+')}"
+    headers = {'User-Agent': 'Mozilla/5.0'}
 
-    try:
-        res = requests.get(url, headers=headers).json()
-        for user in res["users"][:10]:
-            username = user["user"]["username"]
-            fullname = user["user"]["full_name"]
-            print(f"→ {username} ({fullname})")
-    except Exception as e:
-        print("[!] Error:", e)
+    res = requests.get(url, headers=headers)
+    soup = BeautifulSoup(res.text, 'html.parser')
 
-def search_facebook(name):
-    print(f"\n[+] Searching Facebook for: {name}")
-    query = name.replace(" ", "+")
-    url = f"https://www.facebook.com/public?query={query}"
-    headers = {"User-Agent": "Mozilla/5.0"}
+    results = soup.find_all('a', attrs={'class': 'result__a'})
+    if not results:
+        print("[!] No results found.")
+        return
 
-    try:
-        res = requests.get(url, headers=headers)
-        soup = BeautifulSoup(res.text, "html.parser")
-        links = soup.find_all('a', href=True)
-        found = set()
-
-        for a in links:
-            href = a['href']
-            if "facebook.com" in href and "profile.php" in href:
-                found.add(href)
-            elif "facebook.com/" in href and not any(x in href for x in ['sharer', 'pages', 'groups']):
-                found.add(href)
-
-        for link in list(found)[:10]:
-            print("→", link)
-    except Exception as e:
-        print("[!] Error:", e)
+    for r in results[:10]:
+        print("→", r['href'])
 
 def search_internet(name):
     print(f"\n[+] Doing internet search for: {name}")
@@ -64,9 +42,9 @@ def main():
     choice = ask_platform()
 
     if choice == "1":
-        search_instagram(name)
+        search_duckduckgo("instagram.com", name)
     elif choice == "2":
-        search_facebook(name)
+        search_duckduckgo("facebook.com", name)
     elif choice == "3":
         search_internet(name)
     else:
